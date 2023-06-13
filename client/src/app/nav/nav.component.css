@@ -1,3 +1,8 @@
 .dropdwon-toggle, .dropdown-menu, .dropdown{
     cursor: pointer;
-   }
+}
+
+.loginForm{
+    position: absolute;
+    right: 50px;
+}
