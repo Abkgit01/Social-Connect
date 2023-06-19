@@ -1,5 +1,5 @@
 ﻿using API.Data;
-using API.Dto_s;
+using API.Dtos;
 using API.Interfaces;
 using API.Models;
 using Microsoft.AspNetCore.Mvc;

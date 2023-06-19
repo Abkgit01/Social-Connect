@@ -12,6 +12,8 @@ namespace API.Extentions
 
 			Services.AddDbContext<DataContext>(x => x.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 			Services.AddScoped<ITokenService, TokenService>();
+			Services.AddScoped<IUserRepository, UserReposotory>();
+			Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 			return Services;
 		}

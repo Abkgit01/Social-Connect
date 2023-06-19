@@ -1,5 +1,8 @@
 ﻿using API.Data;
+using API.Dtos;
+using API.Interfaces;
 using API.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,25 +12,42 @@ namespace API.Controllers
 {
     public class UsersController : BaseApiController
     {
-        private readonly DataContext _context;
+		private readonly IUserRepository _userRepository;
+		private readonly IMapper _mapper;
 
-        public UsersController(DataContext context)
+		public UsersController(IUserRepository userRepository, IMapper mapper)
         {
-            _context = context;
-        }
+			this._userRepository = userRepository;
+			this._mapper = mapper;
+		}
 
         [AllowAnonymous]
         [HttpGet("GetUsers")]
-        public async Task<IActionResult> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
-            return Ok(await _context.Users.ToListAsync());
-        }
+            var users = await _userRepository.GetMembersAsync();
+            return Ok(users);
+
+		}
 
         [Authorize]
-        [HttpGet("GetUser/id")]
-        public async Task<IActionResult> GetUser(int id)
+        [HttpGet("GetUser/username")]
+        public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
-            return Ok(await _context.Users.FindAsync(id));
+            return await _userRepository.GetMemberAsync(username);
+        }
+
+		[HttpGet("SeedMethod")]
+		public async Task<IActionResult> SeedMethod(DataContext context) 
+        {
+            try
+            {
+				await Seed.SeedUsers(context);
+			}catch (Exception ex)
+            {
+
+            }
+            return Ok();
         }
     }
 }
